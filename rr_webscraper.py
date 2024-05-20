@@ -12,6 +12,25 @@ great_basin = []
 salt_basin = []
 verde_basin = []
 
+# insertion sort method taken from Geeks for Geeks: https://www.geeksforgeeks.org/python-program-for-insertion-sort/
+# modified to sort based on the name of the river
+def insertion_sort(arr):
+    sorted_arr = list(arr)
+    n = len(sorted_arr)  # Get the length of the array
+      
+    if n <= 1:
+        return  # If the array has 0 or 1 element, it is already sorted, so return
+ 
+    for i in range(1, n):  # Iterate over the array starting from the second element
+        key = sorted_arr[i]  # Store the current element as the key to be inserted in the right position
+        j = i-1
+        while j >= 0 and key[0] < sorted_arr[j][0]:  # Move elements greater than key one position ahead
+            sorted_arr[j+1] = sorted_arr[j]  # Shift elements to the right
+            j -= 1
+        sorted_arr[j+1] = key  # Insert the key in the correct position
+    
+    return sorted_arr
+
 # method responsible for getting the river data
 def get_river_data():
     global colorado_basin
@@ -81,12 +100,12 @@ def get_river_data():
                     verde.add((river_name, flow_rate, forecast))
     
     # conver to arrays for ordering and list them
-    colorado_basin = list(col)
-    green_river_basin = list(green)
-    san_juan_basin = list(san_juan)
-    great_basin = list(great)
-    salt_basin = list(salt)
-    verde_basin = list(verde)
+    colorado_basin = insertion_sort(col)
+    green_river_basin = insertion_sort(green)
+    san_juan_basin = insertion_sort(san_juan)
+    great_basin = insertion_sort(great)
+    salt_basin = insertion_sort(salt)
+    verde_basin = insertion_sort(verde)
 
 
 def create_table(river_data, frame, ):
@@ -131,8 +150,8 @@ label.pack(pady=12, padx=10)
 
 # pull data from website
 get_river_data()
-print(colorado_basin)
+
 # Display data in the table
-create_table(colorado_basin, frame)
+create_table(great_basin, frame)
 
 root.mainloop()
