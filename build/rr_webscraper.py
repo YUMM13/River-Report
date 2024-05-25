@@ -161,26 +161,26 @@ def create_table(river_data, frame):
 
 # ----------------------------------------------------- END OF HELPER METHODS ----------------------------------------------------------
 
-# set color theme for gui
-ctk.set_appearance_mode("light")
-ctk.set_default_color_theme("dark-blue")
+# # set color theme for gui
+# ctk.set_appearance_mode("light")
+# ctk.set_default_color_theme("dark-blue")
 
-# creates main window
-root = ctk.CTk()
-root.geometry("720x720")
+# # creates main window
+# root = ctk.CTk()
+# root.geometry("720x720")
 
-# this is where all of our stuff will go
-frame = ctk.CTkFrame(master=root)
-frame.pack(pady=20, padx=60, fill="both", expand=True)
+# # this is where all of our stuff will go
+# frame = ctk.CTkFrame(master=root)
+# frame.pack(pady=20, padx=60, fill="both", expand=True)
 
-label = ctk.CTkLabel(master=frame, text="test")
-label.pack(pady=12, padx=10)
+# label = ctk.CTkLabel(master=frame, text="test")
+# label.pack(pady=12, padx=10)
 
-# pull data from website
-ws = WebScraper()
-data = ws.get_river_data()
+# # pull data from website
+# ws = WebScraper()
+# data = ws.get_river_data()
 
-# Display data in the table
-create_table(data, frame)
+# # Display data in the table
+# create_table(data, frame)
 
-root.mainloop()
+# root.mainloop()

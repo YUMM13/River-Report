@@ -3,6 +3,7 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 import datetime as dt
+from rr_webscraper import WebScraper
 
 from pathlib import Path
 
@@ -24,6 +25,10 @@ window = Tk()
 window.geometry("1280x720")
 window.configure(bg = "#FFFFFF")
 
+# create web scraper class and array that will hold river data
+ws = WebScraper()
+river_data = []
+river_index = 0
 
 canvas = Canvas(
     window,
@@ -656,9 +661,47 @@ fo2 = canvas.create_text(
     font=("Inter", 20 * -1)
 )
 
-def refresh_handler():
+# get the text into an array
+river_cards = [
+    { "basin":b1, "river":r1, "flow":fl1, "forecast":fo1 },
+    { "basin":b2, "river":r2, "flow":fl2, "forecast":fo2 },
+    { "basin":b3, "river":r3, "flow":fl3, "forecast":fo3 },
+    { "basin":b4, "river":r4, "flow":fl4, "forecast":fo4 },
+    { "basin":b5, "river":r5, "flow":fl5, "forecast":fo5 },
+    { "basin":b6, "river":r6, "flow":fl6, "forecast":fo6 },
+    { "basin":b7, "river":r7, "flow":fl7, "forecast":fo7 }
+]
+
+# helper method that brings in data using the web scraper class
+def refresh_data():
+    global river_data 
+
+    # get river data from server
+    river_data = ws.get_river_data()
+
+    # update the time var to show when data was last refreshed
     canvas.itemconfig(tagOrId=last_updated_time, text=dt.datetime.now().strftime("%I:%M %p"))
-    print("data refreshed!")
+
+def update_river_cards(rc):
+    global river_index
+    riv_len = len(river_data)
+
+    # loop through array and update info based off of info in card
+    for i, c in enumerate(rc):
+        index = (river_index + i) % riv_len
+        river = river_data[index]
+        canvas.itemconfig(tagOrId=c["basin"],    text=river[0])
+        canvas.itemconfig(tagOrId=c["river"],    text=river[1])
+        canvas.itemconfig(tagOrId=c["flow"],     text=river[2])
+        canvas.itemconfig(tagOrId=c["forecast"], text=river[3])
+
+    # increment river_index to show next set of rivers in next update
+    river_index = (river_index + 7) % riv_len
+
+    print("changed\n")
+
+    # call this method again after 5 seconds
+    window.after(5000, update_river_cards, rc)
 
 button_image_1 = PhotoImage(
     file=relative_to_assets("button_1.png"))
@@ -666,7 +709,7 @@ button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=refresh_handler,
+    command=refresh_data,
     relief="flat"
 )
 button_1.place(
@@ -676,5 +719,10 @@ button_1.place(
     height=63.0
 )
 
-window.resizable(False, False)
+window.resizable(True, True)
+
+# run the update method that will swap between rivers
+refresh_data()
+update_river_cards(river_cards)
+
 window.mainloop()
