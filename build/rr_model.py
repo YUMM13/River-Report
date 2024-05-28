@@ -22,21 +22,21 @@ class Model:
 
         # get river data from server
         self.river_data = self.ws.get_river_data()
+        self.riv_len = len(self.river_data)
 
     # helper method that brings in data using the web scraper class
     def refresh_data(self, id):
         # get river data from server
         self.river_data = self.ws.get_river_data()
+        self.riv_len = len(self.river_data)
 
         # update the time var to show when data was last refreshed
         self.can.itemconfig(tagOrId=id, text=dt.datetime.now().strftime("%I:%M %p"))
 
     def update_river_cards(self):
-        riv_len = len(self.river_data)
-
         # loop through array and update info based off of info in card
         for i, c in enumerate(self.river_cards):
-            index = (self.river_index + i) % riv_len
+            index = (self.river_index + i) % self.riv_len
             river = self.river_data[index]
             self.can.itemconfig(tagOrId=c["basin"],    text=river[0])
             self.can.itemconfig(tagOrId=c["river"],    text=river[1])
@@ -57,7 +57,7 @@ class Model:
 
 
         # increment river_index to show next set of rivers in next update
-        self.river_index = (self.river_index + 7) % riv_len
+        self.river_index = (self.river_index + 6) % self.riv_len
 
         # call this method again after 5 seconds
         self.win.after(7000, self.update_river_cards)
