@@ -9,12 +9,25 @@ from pathlib import Path
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 
+import os
+import sys
 from rr_model import Model
 
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\blake\Desktop\Personal\River Report\River Report Code\build\assets\frame0")
 
+# method pulled from here:
+# https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS2
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -90,7 +103,7 @@ last_updated_time = canvas.create_text(
 )
 
 image_image_1 = PhotoImage(
-    file=relative_to_assets("image_1.png"))
+    file=resource_path("assets\\frame0\\image_1.png"))
 image_1 = canvas.create_image(
     38.0,
     40.0,
@@ -589,7 +602,7 @@ model = Model([b1, r1, fl1, fo1, box_1,
 
 
 button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
+    file=resource_path("assets\\frame0\\button_1.png"))
 button_1 = Button(
     image=button_image_1,
     borderwidth=0,
