@@ -1,7 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-import customtkinter as ctk
-from tkinter import ttk
 
 class WebScraper:
     def __init__(self):
